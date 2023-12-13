@@ -11,6 +11,6 @@ func MapUrls() {
 	router.GET("/activity/:id", activityController.GetActivityById)
 	router.GET("/activities/user/:id", activityController.GetActivitiesByUserId)
 	router.POST("/activity", activityController.InsertActivity)
-	router.DELETE("/activity/:id", activityController.InsertActivity)
+	router.DELETE("/activity/:id", activityController.DeleteActivityById)
 
 }
