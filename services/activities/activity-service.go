@@ -12,6 +12,7 @@ type activityServiceInterface interface {
 	GetActivityById(id int) (dto.GetActivityDto, error)
 	GetActivitiesByUserId(userId int) (dto.GetActivitiesDto, error)
 	InsertActivity(dto.InsertActivityDto) error
+	DeleteActivityById(activityId int) error
 }
 
 var (
@@ -73,6 +74,15 @@ func (s *activityService) InsertActivity(activityDto dto.InsertActivityDto) erro
 	}
 
 	err := activityClient.InsertActivity(newActivity)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *activityService) DeleteActivityById(activityId int) error {
+	err := activityClient.DeleteActivityById(activityId)
 	if err != nil {
 		return err
 	}
