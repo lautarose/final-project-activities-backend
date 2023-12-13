@@ -27,7 +27,6 @@ func GetActivityById(c *gin.Context) {
 }
 
 func GetActivitiesByUserId(c *gin.Context) {
-	log.Debug("Id to load activities: " + c.Param("id"))
 
 	auth := c.GetHeader("Authorization")
 
@@ -36,8 +35,7 @@ func GetActivitiesByUserId(c *gin.Context) {
 		return
 	}
 
-	id, _ := strconv.Atoi(c.Param("id"))
-	activitiesDto, err := service.ActivityService.GetActivitiesByUserId(id)
+	activitiesDto, err := service.ActivityService.GetActivitiesByUserId(auth)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, activitiesDto)
@@ -62,7 +60,7 @@ func InsertActivity(c *gin.Context) {
 		return
 	}
 
-	if err := service.ActivityService.InsertActivity(activtyDto); err != nil {
+	if err := service.ActivityService.InsertActivity(auth, activtyDto); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al insertar actividad"})
 		return
 	}
@@ -84,7 +82,7 @@ func DeleteActivityById(c *gin.Context) {
 		return
 	}
 
-	err = service.ActivityService.DeleteActivityById(id)
+	err = service.ActivityService.DeleteActivityById(auth, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al eliminar la actividad"})
 		return
