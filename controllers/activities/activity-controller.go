@@ -29,6 +29,13 @@ func GetActivityById(c *gin.Context) {
 func GetActivitiesByUserId(c *gin.Context) {
 	log.Debug("Id to load activities: " + c.Param("id"))
 
+	auth := c.GetHeader("Authorization")
+
+	if auth == "" {
+		c.JSON(http.StatusForbidden, nil)
+		return
+	}
+
 	id, _ := strconv.Atoi(c.Param("id"))
 	activitiesDto, err := service.ActivityService.GetActivitiesByUserId(id)
 
@@ -41,6 +48,13 @@ func GetActivitiesByUserId(c *gin.Context) {
 }
 
 func InsertActivity(c *gin.Context) {
+	auth := c.GetHeader("Authorization")
+
+	if auth == "" {
+		c.JSON(http.StatusForbidden, nil)
+		return
+	}
+
 	var activtyDto dto.InsertActivityDto
 
 	if err := c.ShouldBindJSON(&activtyDto); err != nil {
@@ -57,6 +71,13 @@ func InsertActivity(c *gin.Context) {
 }
 
 func DeleteActivityById(c *gin.Context) {
+	auth := c.GetHeader("Authorization")
+
+	if auth == "" {
+		c.JSON(http.StatusForbidden, nil)
+		return
+	}
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
