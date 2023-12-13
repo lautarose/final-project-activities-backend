@@ -16,14 +16,14 @@ var (
 
 func init() {
 	// DB Connections Paramters
-	DBName := "activities_db" //variable de entorno para nombre de la base de datos
+	DBName := "activities-db" //variable de entorno para nombre de la base de datos
 	DBUser := "activitiesdb"  //variable de entorno para el usuario de la base de datos
 	//DBPass := ""
 	DBPass := "password" //variable de entorno para la pass de la base de datos
-	DBHost := "10.64.64.3"
+	DBHost := "34.95.218.145"
 	// ------------------------
 
-	db, err = gorm.Open("mysql", DBUser+":"+DBPass+"@tcp("+DBHost+":3306)/"+DBName+"?charset=utf8&parseTime=True")
+	db, err = gorm.Open("mysql", DBUser+":"+DBPass+"@tcp("+DBHost+")/"+DBName+"?charset=utf8&parseTime=True")
 
 	db.LogMode(true)
 
