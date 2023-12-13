@@ -109,7 +109,25 @@ func (s *activityService) InsertActivity(auth string, activityDto dto.InsertActi
 }
 
 func (s *activityService) DeleteActivityById(auth string, activityId int) error {
-	err := activityClient.DeleteActivityById(activityId)
+	// Verificar el token de autenticación
+	claims, err := jwtUtils.VerifyToken(auth)
+	if err != nil {
+		return err
+	}
+
+	// Obtener el ID del usuario del token
+	id, err := strconv.Atoi(claims.Id)
+	if err != nil {
+		return err
+	}
+
+	activity, err := activityClient.GetActivityById(activityId)
+
+	if activity.UserID != id {
+		return err
+	}
+
+	err = activityClient.DeleteActivityById(activityId)
 	if err != nil {
 		return err
 	}
