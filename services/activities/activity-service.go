@@ -47,7 +47,7 @@ func (s *activityService) GetActivityById(id int) (dto.GetActivityDto, error) {
 
 func (s *activityService) GetActivitiesByUserId(auth string) (dto.GetActivitiesDto, error) {
 	var activitiesDto dto.GetActivitiesDto
-	
+
 	// Verificar el token de autenticación
 	claims, err := jwtUtils.VerifyToken(auth)
 	if err != nil {
@@ -61,7 +61,6 @@ func (s *activityService) GetActivitiesByUserId(auth string) (dto.GetActivitiesD
 	}
 
 	activities, err := activityClient.GetActivitiesByUserId(id)
-	
 
 	if err != nil {
 		return activitiesDto, err
@@ -82,14 +81,26 @@ func (s *activityService) GetActivitiesByUserId(auth string) (dto.GetActivitiesD
 
 func (s *activityService) InsertActivity(auth string, activityDto dto.InsertActivityDto) error {
 
-	newActivity := activityModel.Activity{
-		UserID:      activityDto.UserID,
-		Title:       activityDto.Title,
-		Description: activityDto.Description,
-		IsDone:      activityDto.IsDone,
+	// Verificar el token de autenticación
+	claims, err := jwtUtils.VerifyToken(auth)
+	if err != nil {
+		return err
 	}
 
-	err := activityClient.InsertActivity(newActivity)
+	// Obtener el ID del usuario del token
+	id, err := strconv.Atoi(claims.Id)
+	if err != nil {
+		return err
+	}
+
+	newActivity := activityModel.Activity{
+		UserID:      id,
+		Title:       activityDto.Title,
+		Description: activityDto.Description,
+		IsDone:      false,
+	}
+
+	err = activityClient.InsertActivity(newActivity)
 	if err != nil {
 		return err
 	}
