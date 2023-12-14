@@ -6,15 +6,20 @@ import (
 )
 
 var (
-	router *gin.Engine
+	router  *gin.Engine
+	webPort = ":8081"
 )
 
 func init() {
 	router = gin.Default()
-	router.Use(cors.Default())
+
+	config := cors.DefaultConfig()
+	config.AllowHeaders = append(config.AllowHeaders, "Authorization")
+	config.AllowAllOrigins = true // Permitir todos los orígenes
+	router.Use(cors.New(config))
 }
 
 func StartRoute() {
 	MapUrls()
-	router.Run(":8081")
+	router.Run(webPort)
 }
